@@ -35,10 +35,12 @@ public abstract class AbstractSortingAlgorithm <T extends Comparable<T>> {
     public void sort(T[] array){
         swaps = 0;
         comparisons = 0;
-        executionTime = 0;
-        //TODO add a start timer
+        steps.clear();
+        
+        long startTime = System.nanoTime();
         performSort(array);
-        //TODO stop the timer and set execution time
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
     }
 
     public long getComparisons() {
