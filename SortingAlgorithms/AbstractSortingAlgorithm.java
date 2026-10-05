@@ -3,15 +3,10 @@ import java.util.List;
 
 public abstract class AbstractSortingAlgorithm <T extends Comparable<T>> {
     private String name;
-    private long comperisons;
+    private long comparisons;
     private long executionTime;
     private long swaps;
     private List<SortStep> steps;
-    //MAYBE: change the steptype to be private
-    // private enum StepType {
-    //     COMPARE,
-    //     SWAP
-    // }
 
     public AbstractSortingAlgorithm(String name){
         this.name = name;
@@ -28,7 +23,7 @@ public abstract class AbstractSortingAlgorithm <T extends Comparable<T>> {
     }
 
     protected int compare(T[] array, int i, int j){
-        comperisons++;
+        comparisons++;
         
         steps.add(new SortStep(StepType.COMPARISON, i, j));
 
@@ -39,10 +34,31 @@ public abstract class AbstractSortingAlgorithm <T extends Comparable<T>> {
 
     public void sort(T[] array){
         swaps = 0;
-        comperisons = 0;
+        comparisons = 0;
         executionTime = 0;
         //TODO add a start timer
         performSort(array);
         //TODO stop the timer and set execution time
     }
+
+    public long getComparisons() {
+        return comparisons;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<SortStep> getSteps() {
+        return steps;
+    }
+
+    public long getSwaps() {
+        return swaps;
+    }
+    
 }

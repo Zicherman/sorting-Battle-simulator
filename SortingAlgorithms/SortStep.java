@@ -12,5 +12,13 @@ public class SortStep{
     public StepType getType(){
         return type;
     }
+
+    public int getIndexi() {
+        return indexi;
+    }
+
+    public int getIndexj() {
+        return indexj;
+    }
 }
 
