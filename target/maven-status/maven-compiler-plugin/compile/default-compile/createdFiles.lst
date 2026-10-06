@@ -1,0 +1,9 @@
+InsertionSort.class
+quickSort.class
+AbstractSortingAlgorithm.class
+bubbleSort.class
+SortStep.class
+StepType.class
+ArrayGenerator.class
+HeapSort.class
+selectionSort.class

@@ -1,3 +1,5 @@
+package sortingAlgorithms;
+
 import java.util.Random;
 
 public class quickSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {

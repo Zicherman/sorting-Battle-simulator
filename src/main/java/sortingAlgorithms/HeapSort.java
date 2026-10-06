@@ -1,3 +1,5 @@
+package sortingAlgorithms;
+
 public class HeapSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 
     public HeapSort() {

@@ -1,3 +1,5 @@
+package sortingAlgorithms;
+
 public class bubbleSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 
     public bubbleSort() {

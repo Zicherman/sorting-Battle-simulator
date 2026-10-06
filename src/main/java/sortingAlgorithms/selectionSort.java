@@ -1,3 +1,5 @@
+package sortingAlgorithms;
+
 public class selectionSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 
     public selectionSort() {
