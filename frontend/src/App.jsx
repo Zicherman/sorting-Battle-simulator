@@ -1,23 +1,28 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
 const apiMap = {
-  'Bubble Sort': 'bubble',
-  'Selection Sort': 'selection',
-  'Insertion Sort': 'insertion',
-  'Heap Sort': 'heap',
-  'Quick Sort': 'quick'
+  "Bubble Sort": "bubble",
+  "Selection Sort": "selection",
+  "Insertion Sort": "insertion",
+  "Heap Sort": "heap",
+  "Quick Sort": "quick",
 };
 
 function App() {
-  
   // algorithm list
-  const algorithms = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Heap Sort', 'Quick Sort'];
+  const algorithms = [
+    "Bubble Sort",
+    "Selection Sort",
+    "Insertion Sort",
+    "Heap Sort",
+    "Quick Sort",
+  ];
 
   // state of the array and array size
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(20); // ברירת מחדל: 20 איברים
-  
+
   // selected algorithms useState (Split into two explicit slots)
   const [fighter1, setFighter1] = useState(null);
   const [fighter2, setFighter2] = useState(null);
@@ -26,7 +31,7 @@ function App() {
   const generateArray = () => {
     const newArray = [];
     for (let i = 0; i < arraySize; i++) {
-      newArray.push(Math.floor(Math.random() * 96) + 5); 
+      newArray.push(Math.floor(Math.random() * 96) + 5);
     }
     setArray(newArray); // פעולה זו מאפסת את המערך הקודם ושומרת את החדש
   };
@@ -47,36 +52,56 @@ function App() {
     // If this algorithm already chose, we will cancel it from its specific slot
     if (fighter1 === algName) {
       setFighter1(null);
-    } 
-    else if (fighter2 === algName) {
+    } else if (fighter2 === algName) {
       setFighter2(null);
     }
     // If not chosen, fill the first available slot
     else if (!fighter1) {
       setFighter1(algName);
-    } 
-    else if (!fighter2) {
+    } else if (!fighter2) {
       setFighter2(algName);
+    }
+  };
+
+  //TODO modify it
+  const handleSort = async (alg) => {
+    console.log("here");
+    const endpoint = apiMap[alg];
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/sort/${endpoint}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ array: array }),
+        },
+      );
+
+      const data = await response.json();
+      console.log(data);
+      setArray(data.returnArray);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
     <div className="app-container">
       <h1>Sorting Algorithms Battle Simulator</h1>
-
       {/* data input section */}
       <div className="top-section data-input">
         <div className="input-controls">
-          
           <div className="size-control">
             <label htmlFor="arraySize">Array Size: {arraySize}</label>
-            <input 
-              type="range" 
-              id="arraySize" 
-              min="5" 
-              max="100" 
-              value={arraySize} 
-              onChange={handleSizeChange} 
+            <input
+              type="range"
+              id="arraySize"
+              min="5"
+              max="100"
+              value={arraySize}
+              onChange={handleSizeChange}
             />
           </div>
 
@@ -84,23 +109,22 @@ function App() {
           <button onClick={generateArray} className="generate-btn">
             Generate New Array
           </button>
-          
-        </div> {/* <-- כאן נסגר ה-input-controls בצורה תקינה */}
-        
+          {/* TODO remove it later */}
+          <button onClick={() => handleSort(fighter1)}>sort</button>
+        </div>{" "}
+        {/* <-- כאן נסגר ה-input-controls בצורה תקינה */}
         {/* array display */}
         <div className="array-display">
-          <p>Current Array: [{array.join(', ')}]</p>
+          <p>Current Array: [{array.join(", ")}]</p>
         </div>
-        
-      </div> {/* <-- כאן נסגר ה-top-section בצורה תקינה */}
-
+      </div>{" "}
+      {/* <-- כאן נסגר ה-top-section בצורה תקינה */}
       {/* central section */}
       <div className="middle-section battle-arena">
-        
         {/* algorithm1 */}
         <div className="animation-panel">
           <div className="animation-screen">
-            <h2>{fighter1 || 'Waiting for Fighter 1...'}</h2>
+            <h2>{fighter1 || "Waiting for Fighter 1..."}</h2>
           </div>
           <div className="stats-bar">
             <div className="stat-box">Swap: 0</div>
@@ -116,27 +140,25 @@ function App() {
         {/* algorithm2 */}
         <div className="animation-panel">
           <div className="animation-screen">
-            <h2>{fighter2 || 'Waiting for Fighter 2...'}</h2>
+            <h2>{fighter2 || "Waiting for Fighter 2..."}</h2>
           </div>
           <div className="stats-bar">
             <div className="stat-box">Swap: 0</div>
             <div className="stat-box">Comp: 0</div>
           </div>
         </div>
-
       </div>
-
       {/* bottom section - algorithms selection*/}
       <div className="bottom-section algorithm-selector">
         {algorithms.map((alg, index) => {
           // נבדוק האם האלגוריתם הנוכחי נמצא באחד ממשבצות הנבחרים
-          const isSelected = (fighter1 === alg || fighter2 === alg);
-          
+          const isSelected = fighter1 === alg || fighter2 === alg;
+
           return (
-            <div 
-              key={index} 
+            <div
+              key={index}
               // נוסיף קלאס CSS מיוחד אם הוא נבחר
-              className={`fighter-card ${isSelected ? 'selected' : ''}`}
+              className={`fighter-card ${isSelected ? "selected" : ""}`}
               onClick={() => toggleFighter(alg)}
             >
               {alg}
@@ -145,7 +167,7 @@ function App() {
         })}
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
