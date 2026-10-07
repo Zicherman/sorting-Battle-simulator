@@ -3,6 +3,11 @@
 
 # Maven build directory (contains all compiled files)
 target/
+target_classes/
+target_test-classes/
+
+# Vite cache
+.vite/
 
 # VS Code settings
 .vscode/
