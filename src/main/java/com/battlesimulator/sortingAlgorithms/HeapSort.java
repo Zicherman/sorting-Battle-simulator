@@ -1,4 +1,4 @@
-package sortingAlgorithms;
+package com.battlesimulator.sortingAlgorithms;
 
 public class HeapSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 

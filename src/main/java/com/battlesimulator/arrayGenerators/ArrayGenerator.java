@@ -1,4 +1,4 @@
-package arrayGenerators;
+package com.battlesimulator.arrayGenerators;
 
 import java.util.Random;
 
