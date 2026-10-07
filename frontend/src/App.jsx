@@ -1,121 +1,150 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
+const apiMap = {
+  'Bubble Sort': 'bubble',
+  'Selection Sort': 'selection',
+  'Insertion Sort': 'insertion',
+  'Heap Sort': 'heap',
+  'Quick Sort': 'quick'
+};
+
 function App() {
-  const [count, setCount] = useState(0)
+  
+  // algorithm list
+  const algorithms = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Heap Sort', 'Quick Sort'];
+
+  // state of the array and array size
+  const [array, setArray] = useState([]);
+  const [arraySize, setArraySize] = useState(20); // ברירת מחדל: 20 איברים
+  
+  // selected algorithms useState (Split into two explicit slots)
+  const [fighter1, setFighter1] = useState(null);
+  const [fighter2, setFighter2] = useState(null);
+
+  // generate new array function
+  const generateArray = () => {
+    const newArray = [];
+    for (let i = 0; i < arraySize; i++) {
+      newArray.push(Math.floor(Math.random() * 96) + 5); 
+    }
+    setArray(newArray); // פעולה זו מאפסת את המערך הקודם ושומרת את החדש
+  };
+
+  // when the app is running generate array
+  useEffect(() => {
+    generateArray();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // array size chenge
+  const handleSizeChange = (e) => {
+    setArraySize(Number(e.target.value));
+  };
+
+  //function that handle the algorithm click
+  const toggleFighter = (algName) => {
+    // If this algorithm already chose, we will cancel it from its specific slot
+    if (fighter1 === algName) {
+      setFighter1(null);
+    } 
+    else if (fighter2 === algName) {
+      setFighter2(null);
+    }
+    // If not chosen, fill the first available slot
+    else if (!fighter1) {
+      setFighter1(algName);
+    } 
+    else if (!fighter2) {
+      setFighter2(algName);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      <h1>Sorting Algorithms Battle Simulator</h1>
+
+      {/* data input section */}
+      <div className="top-section data-input">
+        <div className="input-controls">
+          
+          <div className="size-control">
+            <label htmlFor="arraySize">Array Size: {arraySize}</label>
+            <input 
+              type="range" 
+              id="arraySize" 
+              min="5" 
+              max="100" 
+              value={arraySize} 
+              onChange={handleSizeChange} 
+            />
+          </div>
+
+          {/* generate array button */}
+          <button onClick={generateArray} className="generate-btn">
+            Generate New Array
+          </button>
+          
+        </div> {/* <-- כאן נסגר ה-input-controls בצורה תקינה */}
+        
+        {/* array display */}
+        <div className="array-display">
+          <p>Current Array: [{array.join(', ')}]</p>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+        
+      </div> {/* <-- כאן נסגר ה-top-section בצורה תקינה */}
+
+      {/* central section */}
+      <div className="middle-section battle-arena">
+        
+        {/* algorithm1 */}
+        <div className="animation-panel">
+          <div className="animation-screen">
+            <h2>{fighter1 || 'Waiting for Fighter 1...'}</h2>
+          </div>
+          <div className="stats-bar">
+            <div className="stat-box">Swap: 0</div>
+            <div className="stat-box">Comp: 0</div>
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+
+        {/* start button (and enable it only when we choose 2 algorithms)*/}
+        <button className="start-button" disabled={!fighter1 || !fighter2}>
+          START
         </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        {/* algorithm2 */}
+        <div className="animation-panel">
+          <div className="animation-screen">
+            <h2>{fighter2 || 'Waiting for Fighter 2...'}</h2>
+          </div>
+          <div className="stats-bar">
+            <div className="stat-box">Swap: 0</div>
+            <div className="stat-box">Comp: 0</div>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      </div>
+
+      {/* bottom section - algorithms selection*/}
+      <div className="bottom-section algorithm-selector">
+        {algorithms.map((alg, index) => {
+          // נבדוק האם האלגוריתם הנוכחי נמצא באחד ממשבצות הנבחרים
+          const isSelected = (fighter1 === alg || fighter2 === alg);
+          
+          return (
+            <div 
+              key={index} 
+              // נוסיף קלאס CSS מיוחד אם הוא נבחר
+              className={`fighter-card ${isSelected ? 'selected' : ''}`}
+              onClick={() => toggleFighter(alg)}
+            >
+              {alg}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   )
 }
 

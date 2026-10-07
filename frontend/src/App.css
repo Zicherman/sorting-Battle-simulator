@@ -182,3 +182,59 @@
     border-right-color: var(--border);
   }
 }
+
+/* האפקט הזוהר לאלגוריתם שנבחר */
+.fighter-card.selected {
+  background-color: #2874A6;
+  border-color: #5DADE2;
+  box-shadow: 0 0 15px rgba(93, 173, 226, 0.9);
+}
+
+.fighter-card:hover {
+  transform: translateY(-2px); /* מקפיץ אותו קצת למעלה */
+}
+
+/* כיבוי כפתור ה-Start אם אין 2 לוחמים */
+.start-button:disabled {
+  background-color: #7F8C8D;
+  border-color: #515A5A;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* עיצוב אזור הקלט והסליידר */
+.input-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+
+.size-control {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.size-control input[type="range"] {
+  cursor: pointer;
+  width: 150px;
+}
+
+.generate-btn {
+  background-color: #3498DB;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.generate-btn:hover {
+  background-color: #2980B9;
+}
