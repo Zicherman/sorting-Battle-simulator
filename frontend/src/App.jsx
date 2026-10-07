@@ -27,6 +27,10 @@ function App() {
   const [fighter1, setFighter1] = useState(null);
   const [fighter2, setFighter2] = useState(null);
 
+  //state to hold the steps of each fighter
+  const [fighter1Data, setFighter1Data] = useState(null);
+  const [fighter2Data, setFighter2Data] = useState(null);
+
   // generate new array function
   const generateArray = () => {
     const newArray = [];
@@ -64,24 +68,38 @@ function App() {
   };
 
   //TODO modify it
-  const handleSort = async (alg) => {
+  const handleSort = async (alg1, alg2) => {
     console.log("here");
-    const endpoint = apiMap[alg];
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/sort/${endpoint}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ array: array }),
-        },
-      );
+    const endpoint1 = apiMap[alg1];
+    const endpoint2 = apiMap[alg2];
 
-      const data = await response.json();
-      console.log(data);
-      setArray(data.returnArray);
+    try {
+      const requeste1 = fetch(`http://localhost:8080/api/sort/${endpoint1}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ array: array }),
+      });
+      const requeste2 = fetch(`http://localhost:8080/api/sort/${endpoint2}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ array: array }),
+      });
+
+      const [response1, response2] = await Promise.all([requeste1, requeste2]);
+
+      const [data1, data2] = await Promise.all([
+        response1.json(),
+        response2.json(),
+      ]);
+
+      setFighter1Data(data1);
+      setFighter2Data(data2);
+
+      setArray(data1.returnArray);
     } catch (err) {
       console.log(err);
     }
@@ -110,7 +128,7 @@ function App() {
             Generate New Array
           </button>
           {/* TODO remove it later */}
-          <button onClick={() => handleSort(fighter1)}>sort</button>
+          <button onClick={() => handleSort(fighter1, fighter2)}>sort</button>
         </div>{" "}
         {/* <-- כאן נסגר ה-input-controls בצורה תקינה */}
         {/* array display */}
