@@ -1,4 +1,4 @@
-package sortingAlgorithms;
+package com.battlesimulator.sortingAlgorithms;
 
 import java.util.ArrayList;
 import java.util.List;
