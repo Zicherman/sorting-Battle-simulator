@@ -1,3 +1,5 @@
+package arrayGenerators;
+
 import java.util.Random;
 
 //this is will be helper class that provide static methods use to generate arrays

@@ -1,3 +1,5 @@
+package sortingAlgorithms;
+
 public class InsertionSort <T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
     
     public InsertionSort(){
