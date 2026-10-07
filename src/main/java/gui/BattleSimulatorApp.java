@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -42,7 +43,16 @@ public class BattleSimulatorApp extends Application {
         
         Button startBtn = new Button("start");
         startBtn.setPrefSize(80, 40);
-        startBtn.setStyle("-fx-background-color: #21618C; -fx-text-fill: white;");
+        startBtn.setStyle("-fx-background-color: #21618C; -fx-text-fill: white; -fx-cursor: hand;");
+        //try
+        startBtn.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Test");
+            alert.setHeaderText(null);
+            alert.setContentText("Start!");
+            alert.show(); // מקפיץ את החלונית על המסך
+        });
+        ///
         
         VBox rightArena = new VBox();
         rightArena.setPrefSize(350, 250);
