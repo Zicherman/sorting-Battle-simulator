@@ -2,11 +2,11 @@ package sortingAlgorithms;
 
 import java.util.Random;
 
-public class quickSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+public class QuickSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
     
     private Random rand;
     
-    public quickSort() {
+    public QuickSort() {
         super("Quick Sort");
         this.rand = new Random();
     }

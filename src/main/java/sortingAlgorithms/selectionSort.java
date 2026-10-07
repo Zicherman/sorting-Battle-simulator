@@ -1,8 +1,8 @@
 package sortingAlgorithms;
 
-public class selectionSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+public class SelectionSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 
-    public selectionSort() {
+    public SelectionSort() {
         super("Selection Sort");
     }
 
