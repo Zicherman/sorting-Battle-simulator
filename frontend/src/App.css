@@ -263,3 +263,10 @@
   border: 0.15rem solid #1b4f72;
   border-radius: 0.4rem;
 }
+
+.generate-btn:disabled,
+.fighter-card.disabled-card {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
