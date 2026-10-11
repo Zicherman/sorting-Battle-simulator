@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Visualizer from "./Visualizer";
 import "./App.css";
 
 const apiMap = {
@@ -21,7 +22,7 @@ function App() {
 
   // state of the array and array size
   const [array, setArray] = useState([]);
-  const [arraySize, setArraySize] = useState(20); // ברירת מחדל: 20 איברים
+  const [arraySize, setArraySize] = useState(5); // ברירת מחדל: 20 איברים
 
   // selected algorithms useState (Split into two explicit slots)
   const [fighter1, setFighter1] = useState(null);
@@ -139,32 +140,26 @@ function App() {
       {/* <-- כאן נסגר ה-top-section בצורה תקינה */}
       {/* central section */}
       <div className="middle-section battle-arena">
-        {/* algorithm1 */}
-        <div className="animation-panel">
-          <div className="animation-screen">
-            <h2>{fighter1 || "Waiting for Fighter 1..."}</h2>
-          </div>
-          <div className="stats-bar">
-            <div className="stat-box">Swap: 0</div>
-            <div className="stat-box">Comp: 0</div>
-          </div>
-        </div>
+        {/* algorithm 1 */}
+        <Visualizer
+          fighterName={fighter1}
+          initialArray={array}
+          steps={steps1}
+          isRunning={isRunning}
+        />
 
         {/* start button (and enable it only when we choose 2 algorithms)*/}
         <button className="start-button" disabled={!fighter1 || !fighter2}>
           START
         </button>
 
-        {/* algorithm2 */}
-        <div className="animation-panel">
-          <div className="animation-screen">
-            <h2>{fighter2 || "Waiting for Fighter 2..."}</h2>
-          </div>
-          <div className="stats-bar">
-            <div className="stat-box">Swap: 0</div>
-            <div className="stat-box">Comp: 0</div>
-          </div>
-        </div>
+        {/* algorithm 2 */}
+        <Visualizer
+          fighterName={fighter2}
+          initialArray={array}
+          steps={steps2}
+          isRunning={isRunning}
+        />
       </div>
       {/* bottom section - algorithms selection*/}
       <div className="bottom-section algorithm-selector">
