@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -185,8 +185,8 @@
 
 /* האפקט הזוהר לאלגוריתם שנבחר */
 .fighter-card.selected {
-  background-color: #2874A6;
-  border-color: #5DADE2;
+  background-color: #2874a6;
+  border-color: #5dade2;
   box-shadow: 0 0 15px rgba(93, 173, 226, 0.9);
 }
 
@@ -196,8 +196,8 @@
 
 /* כיבוי כפתור ה-Start אם אין 2 לוחמים */
 .start-button:disabled {
-  background-color: #7F8C8D;
-  border-color: #515A5A;
+  background-color: #7f8c8d;
+  border-color: #515a5a;
   cursor: not-allowed;
   transform: none;
 }
@@ -225,7 +225,7 @@
 }
 
 .generate-btn {
-  background-color: #3498DB;
+  background-color: #3498db;
   color: white;
   padding: 10px 20px;
   border: 2px solid white;
@@ -236,5 +236,37 @@
 }
 
 .generate-btn:hover {
-  background-color: #2980B9;
+  background-color: #2980b9;
+}
+
+.app-container {
+  width: 92vw; /* תופס 92% מרוחב המסך */
+  max-width: 1600px; /* גבול עליון למסכי ענק */
+  min-height: 95vh; /* מתפרס על פני גובה המסך */
+  margin: 0 auto;
+  padding: 1.5vh 2vw;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2vh;
+}
+
+.animation-screen {
+  background-color: #2874a6;
+  height: 38vh; /* תמיד 38% מגובה המסך במקום 300px קבוע! */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.15rem solid #1b4f72;
+  border-radius: 0.4rem;
+}
+
+.generate-btn:disabled,
+.fighter-card.disabled-card {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
