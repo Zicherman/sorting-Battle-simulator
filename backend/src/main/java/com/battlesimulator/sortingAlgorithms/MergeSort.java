@@ -1,5 +1,8 @@
 package com.battlesimulator.sortingAlgorithms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MergeSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
 
     public MergeSort() {
@@ -17,35 +20,48 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSortingAlgorithm
             int mid = left + (right - left) / 2;
             mergeSort(array, left, mid);
             mergeSort(array, mid + 1, right);
-            mergeInPlace(array, left, mid, right);
+            mergeLinear(array, left, mid, right);
         }
     }
 
-    private void mergeInPlace(T[] array, int start, int mid, int end) {
-        int start2 = mid + 1;
+    private void mergeLinear(T[] array, int left, int mid, int right) {
+        // 1. איחוד ליניארי קלאסי O(n) לתוך רשימת עזר תוך ספירת ההשוואות האמיתיות!
+        List<T> merged = new ArrayList<>(right - left + 1);
+        int i = left;
+        int j = mid + 1;
 
-        // If the direct merge is already sorted, no need to do anything
-        if (compare(array, mid, start2) <= 0) {
-            return;
+        while (i <= mid && j <= right) {
+            if (compare(array, i, j) <= 0) {
+                merged.add(array[i]);
+                i++;
+            } else {
+                merged.add(array[j]);
+                j++;
+            }
         }
 
-        while (start <= mid && start2 <= end) {
-            // If element 1 is in the right place
-            if (compare(array, start, start2) <= 0) {
-                start++;
-            } else {
-                // Element at start2 is smaller than element at start.
-                // Shift it into the 'start' position using adjacent swaps to preserve animation!
-                int index = start2;
-                while (index != start) {
-                    swap(array, index - 1, index);
-                    index--;
-                }
+        while (i <= mid) {
+            merged.add(array[i]);
+            i++;
+        }
 
-                // Update all pointers
-                start++;
-                mid++;
-                start2++;
+        while (j <= right) {
+            merged.add(array[j]);
+            j++;
+        }
+
+        // 2. העברת האיברים למקומם בתת-המערך ב-SWAP ישיר אחד לכל איבר (בלי גרירה איטית!)
+        for (int k = 0; k < merged.size(); k++) {
+            int writeIdx = left + k;
+            T targetVal = merged.get(k);
+
+            int findIdx = writeIdx;
+            while (findIdx <= right && !array[findIdx].equals(targetVal)) {
+                findIdx++;
+            }
+
+            if (findIdx <= right && findIdx != writeIdx) {
+                swap(array, writeIdx, findIdx);
             }
         }
     }
