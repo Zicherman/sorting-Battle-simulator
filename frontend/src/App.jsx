@@ -55,6 +55,7 @@ function App() {
   const handleSizeChange = (e) => {
     if (isRunning) return; // שינוי 3: חסימת הזזת הסליידר בזמן ריצה
     setArraySize(Number(e.target.value));
+    generateArray();
   };
 
   const toggleFighter = (algName) => {
