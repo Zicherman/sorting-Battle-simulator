@@ -1,4 +1,3 @@
-// frontend/src/Visualizer.jsx
 import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 
@@ -18,10 +17,11 @@ const ArrayBar = styled.div`
   height: ${(props) => props.$height}%;
 
   background-color: ${(props) => {
-    if (props.$status === "SWAP") return "#e74c3c"; // אדום - החלפה
-    if (props.$status === "COMPARISON") return "#f1c40f"; // צהוב - השוואה
-    if (props.$status === "SORTED") return "#2ecc71"; // ירוק - הגיע למקומו הסופי!
-    return "#ffffff"; // לבן - ברירת מחדל
+    if (props.$status === "SWAP") return "#e74c3c";
+    if (props.$status === "OVERWRITE") return "#9b59b6"; // הוספנו: סגול - דריסת ערך!
+    if (props.$status === "COMPARISON") return "#f1c40f";
+    if (props.$status === "SORTED") return "#2ecc71";
+    return "#ffffff";
   }};
 
   transition:
@@ -47,28 +47,24 @@ function Visualizer({
   const [swaps, setSwaps] = useState(0);
   const [comparisons, setComparisons] = useState(0);
 
-  // חישוב המערך הממוין הסופי כדי שנדע מתי איבר יושב בערך הנכון שלו
   const targetSortedArray = useMemo(() => {
     return [...initialArray].sort((a, b) => a - b);
   }, [initialArray]);
 
-  // חישוב הצעד האחרון שבו כל אינדקס עובר החלפה (SWAP)
-  // ברגע שעברנו את הצעד הזה והאיבר שווה לערך הסופי שלו - הוא ייצבע בירוק קבוע תוך כדי הריצה!
   const lastSwapStepForIndex = useMemo(() => {
     const map = {};
     if (!steps) return map;
     steps.forEach((step, stepIdx) => {
-      if (step.type === "SWAP") {
+      if (step.type === "SWAP" || step.type === "OVERWRITE") {
         const i = step.indexi ?? step.index1 ?? step.i;
         const j = step.indexj ?? step.index2 ?? step.j;
-        map[i] = stepIdx;
-        map[j] = stepIdx;
+        if (i !== undefined && i !== -1) map[i] = stepIdx;
+        if (j !== undefined && j !== -1) map[j] = stepIdx;
       }
     });
     return map;
   }, [steps]);
 
-  // איפוס כשמג'נרטים מערך חדש, מחליפים לוחם או מקבלים צעדים חדשים
   useEffect(() => {
     setDisplayArray([...initialArray]);
     setCurrentStepIdx(0);
@@ -78,17 +74,14 @@ function Visualizer({
     setComparisons(0);
   }, [initialArray, fighterName, steps]);
 
-  // מנוע האנימציה
   useEffect(() => {
-    // ירוץ רק אם יש צעדים אמיתיים שנשלחו מלחיצה על START
     if (!steps || steps.length === 0) return;
 
-    // סיום כל הצעדים
     if (currentStepIdx >= steps.length) {
       if (stepType !== "SORTED") {
         setActiveIndices([]);
         setStepType("SORTED");
-        if (onFinish) onFinish(); // מודיע ל-App שהלוחם הזה סיים!
+        if (onFinish) onFinish();
       }
       return;
     }
@@ -98,15 +91,16 @@ function Visualizer({
 
       const i = step.indexi ?? step.index1 ?? step.i;
       const j = step.indexj ?? step.index2 ?? step.j;
+      const val = step.value ?? step.val; // הוספנו: משיכת הערך לדריסה
       const rawType = step.type ?? step.stepType;
 
-      // נרמול השם כדי שיתפוס גם COMPARISON וגם COMPARE
       const normalizedType =
         rawType === "COMPARISON" || rawType === "COMPARE"
           ? "COMPARISON"
           : rawType;
 
-      setActiveIndices([i, j]);
+      // הוספנו: אם זו דריסה, רק אינדקס i פעיל. אחרת, i ו-j
+      setActiveIndices(normalizedType === "OVERWRITE" ? [i] : [i, j]);
       setStepType(normalizedType);
 
       if (normalizedType === "COMPARISON") {
@@ -120,6 +114,13 @@ function Visualizer({
           newArr[j] = temp;
           return newArr;
         });
+      } else if (normalizedType === "OVERWRITE") {
+        // הוספנו: טיפול באנימציה של דריסה
+        setDisplayArray((prevArr) => {
+          const newArr = [...prevArr];
+          newArr[i] = val; // משנה רק את הגובה של העמודה
+          return newArr;
+        });
       }
 
       setCurrentStepIdx((prev) => prev + 1);
@@ -128,16 +129,10 @@ function Visualizer({
     return () => clearTimeout(timer);
   }, [steps, currentStepIdx, speed, stepType, onFinish]);
 
-  // פונקציה שקובעת את צבע העמודה בכל רגע נתון
   const getBarStatus = (idx) => {
-    // 1. אם כל המיון הסתיים - הכל ירוק
     if (stepType === "SORTED") return "SORTED";
-
-    // 2. אם העמודה מושווית או מוחלפת ממש בצעד הנוכחי - צהוב או אדום
     if (activeIndices.includes(idx)) return stepType;
 
-    // 3. בדיקה תוך כדי ריצה: אם הריצה התחילה, האיבר כבר נמצא בערך הסופי שלו,
-    // והוא לא יעבור יותר שום SWAP בהמשך הריצה - צבע אותו בירוק כבר עכשיו!
     if (steps && steps.length > 0 && currentStepIdx > 0) {
       const lastSwap = lastSwapStepForIndex[idx] ?? -1;
       if (
@@ -167,7 +162,7 @@ function Visualizer({
       </div>
 
       <div className="stats-bar">
-        <div className="stat-box">Swap: {swaps}</div>
+        <div className="stat-box">Swap/Write: {swaps}</div>
         {executionTime !== undefined && stepType === "SORTED" && (
           <div className="stat-box">
             Time: {(executionTime / 1000000).toFixed(4)} ms

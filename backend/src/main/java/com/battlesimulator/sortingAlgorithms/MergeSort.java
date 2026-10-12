@@ -25,7 +25,7 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSortingAlgorithm
     }
 
     private void mergeLinear(T[] array, int left, int mid, int right) {
-        // 1. איחוד ליניארי קלאסי O(n) לתוך רשימת עזר תוך ספירת ההשוואות האמיתיות!
+        // איחוד ליניארי קלאסי לתוך רשימת עזר
         List<T> merged = new ArrayList<>(right - left + 1);
         int i = left;
         int j = mid + 1;
@@ -50,19 +50,14 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSortingAlgorithm
             j++;
         }
 
-        // 2. העברת האיברים למקומם בתת-המערך ב-SWAP ישיר אחד לכל איבר (בלי גרירה איטית!)
+        // השינוי שלנו: במקום לחפש איפה האיבר נמצא במערך ולהחליף, 
+        // פשוט עוברים על רשימת העזר ודורסים את המערך המקורי!
         for (int k = 0; k < merged.size(); k++) {
             int writeIdx = left + k;
             T targetVal = merged.get(k);
-
-            int findIdx = writeIdx;
-            while (findIdx <= right && !array[findIdx].equals(targetVal)) {
-                findIdx++;
-            }
-
-            if (findIdx <= right && findIdx != writeIdx) {
-                swap(array, writeIdx, findIdx);
-            }
+            
+            // שימוש בפונקציה החדשה שעושה הכל: מעדכנת, סופרת ומתעדת אנימציה של OVERWRITE
+            overwrite(array, writeIdx, targetVal); 
         }
     }
 }

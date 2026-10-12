@@ -22,29 +22,29 @@ public class RadixSort<T extends Comparable<T>> extends AbstractSortingAlgorithm
 
         // מעבר על כל ספרה (אחדות, עשרות...)
         for (int exp = 1; max / exp > 0; exp *= 10) {
-            // 1. חלוקה ל-10 דליים בזיכרון (כמו ב-Radix אמיתי)
+            
+            // חלוקה ל-10 דליים
             List<List<T>> buckets = new ArrayList<>(10);
             for (int d = 0; d < 10; d++) {
                 buckets.add(new ArrayList<>());
             }
 
+            // הכנסת האיברים לדליים לפי הספרה הנוכחית
             for (int i = 0; i < n; i++) {
                 int val = ((Number) array[i]).intValue();
                 int digit = (val / exp) % 10;
                 buckets.get(digit).add(array[i]);
             }
 
-            // 2. החזרת האיברים למערך ב-SWAP ישיר אחד לכל איבר (בלי גרירה של לולאת while!)
+            // החזרת האיברים למערך - דריסה חלקה וישירה
             int writeIdx = 0;
             for (int d = 0; d < 10; d++) {
                 for (T targetVal : buckets.get(d)) {
-                    int findIdx = writeIdx;
-                    while (findIdx < n && !array[findIdx].equals(targetVal)) {
-                        findIdx++;
-                    }
-                    if (findIdx < n && findIdx != writeIdx) {
-                        swap(array, writeIdx, findIdx); // קפיצה ישירה בפעולה אחת!
-                    }
+                    
+                    // כאן אנחנו קוראים לפונקציה החדשה שיצרת ב-AbstractSortingAlgorithm
+                    // היא מעדכנת את המערך, סופרת את הפעולה ומתעדת את צעד האנימציה (OVERWRITE)
+                    overwrite(array, writeIdx, targetVal);
+                    
                     writeIdx++;
                 }
             }
