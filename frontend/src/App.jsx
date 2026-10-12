@@ -1,5 +1,4 @@
 // frontend/src/App.jsx
-// שינוי 1: הוספנו ייבוא של useCallback
 import { useState, useEffect, useCallback } from "react";
 import Visualizer from "./Visualizer";
 import "./App.css";
@@ -30,7 +29,7 @@ const algorithms = [
 
 function App() {
   const [array, setArray] = useState([]);
-  const [arraySize, setArraySize] = useState(5);
+  const [arraySize, setArraySize] = useState(20);
 
   const [fighter1, setFighter1] = useState(null);
   const [fighter2, setFighter2] = useState(null);
@@ -38,32 +37,48 @@ function App() {
   const [fighter1Data, setFighter1Data] = useState(null);
   const [fighter2Data, setFighter2Data] = useState(null);
 
-  // שינוי 2: isRunning נגזר אוטומטית מ-activeRunners (מחקנו את useState(false) של isRunning)
   const [activeRunners, setActiveRunners] = useState(0);
   const isRunning = activeRunners > 0;
 
-  const generateArray = () => {
-    if (isRunning) return; // חסימה בזמן ריצה
-    setActiveRunners(0); // איפוס מונה הרצים
+  // פונקציה שמייצרת מערך חדש (מקבלת גודל אופציונלי כדי לתמוך בעזיבת הסליידר)
+  const generateArray = (customSize = arraySize) => {
+    if (isRunning) return;
+    setActiveRunners(0);
     setFighter1Data(null);
     setFighter2Data(null);
 
     const newArray = [];
-    for (let i = 0; i < arraySize; i++) {
+    for (let i = 0; i < customSize; i++) {
       newArray.push(Math.floor(Math.random() * 96) + 5);
     }
     setArray(newArray);
   };
 
+  // רץ פעם אחת בלבד בטעינת האפליקציה
   useEffect(() => {
-    generateArray();
+    generateArray(arraySize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // <-- שינוי 1: בזמן הגרירה מעדכנים רק את המספר בתצוגה (בלי לקרוא ל-generateArray)
   const handleSizeChange = (e) => {
-    if (isRunning) return; // שינוי 3: חסימת הזזת הסליידר בזמן ריצה
+    if (isRunning) return;
     setArraySize(Number(e.target.value));
-    generateArray();
+  };
+
+  // <-- שינוי 2: פונקציה שנקראת רק כשעוזבים את הלחיצה על הסליידר!
+  const handleSliderRelease = () => {
+    if (isRunning) return;
+    generateArray(arraySize);
+  };
+
+  // <-- שינוי 3: פונקציית Reset שמפסיקה את הקרב ומחזירה את המערך למצבו ההתחלתי
+  const handleReset = () => {
+    setActiveRunners(0); // עוצר את מצב הריצה ומשחרר כפתורים
+    setFighter1Data(null); // מוחק את הצעדים של לוחם 1 (מאפס את ה-Visualizer שלו)
+    setFighter2Data(null); // מוחק את הצעדים של לוחם 2 (מאפס את ה-Visualizer שלו)
+    setFighter1(null);
+    setFighter2(null);
   };
 
   const toggleFighter = (algName) => {
@@ -81,7 +96,6 @@ function App() {
     }
   };
 
-  // שינוי 4: עטיפה ב-useCallback כדי שהפונקציה תישאר יציבה בזיכרון בזמן האנימציה
   const handleFighterFinish = useCallback(() => {
     setActiveRunners((prev) => Math.max(0, prev - 1));
   }, []);
@@ -89,7 +103,6 @@ function App() {
   const handleSort = async (alg1, alg2) => {
     if (!alg1 || !alg2 || isRunning) return;
 
-    // איפוס נתונים קודמים לפני תחילת קרב חדש
     setFighter1Data(null);
     setFighter2Data(null);
 
@@ -121,7 +134,7 @@ function App() {
 
       setFighter1Data(data1);
       setFighter2Data(data2);
-      setActiveRunners(2); // מפעיל את isRunning = true!
+      setActiveRunners(2);
     } catch (err) {
       console.error("Error fetching sort data:", err);
       setActiveRunners(0);
@@ -137,7 +150,7 @@ function App() {
         <div className="input-controls">
           <div className="size-control">
             <label htmlFor="arraySize">Array Size: {arraySize}</label>
-            {/* שינוי 5: הוספת disabled={isRunning} לסליידר */}
+            {/* <-- שינוי 4: הוספת onMouseUp ו-onTouchEnd לסליידר */}
             <input
               type="range"
               id="arraySize"
@@ -145,13 +158,14 @@ function App() {
               max="100"
               value={arraySize}
               onChange={handleSizeChange}
+              onMouseUp={handleSliderRelease}
+              onTouchEnd={handleSliderRelease}
               disabled={isRunning}
             />
           </div>
 
-          {/* שינוי 6: הוספת disabled={isRunning} לכפתור הג'ינרוט */}
           <button
-            onClick={generateArray}
+            onClick={() => generateArray(arraySize)}
             className="generate-btn"
             disabled={isRunning}
           >
@@ -162,7 +176,6 @@ function App() {
 
       {/* central section */}
       <div className="middle-section battle-arena">
-        {/* שינוי 7: הסרת || [] מ-steps והעברת onFinish={handleFighterFinish} */}
         <Visualizer
           fighterName={fighter1}
           initialArray={array}
@@ -171,16 +184,31 @@ function App() {
           onFinish={handleFighterFinish}
         />
 
-        {/* שינוי 8: נעילת כפתור ה-START גם כש-isRunning הוא true */}
-        <button
-          className="start-button"
-          disabled={!fighter1 || !fighter2 || isRunning}
-          onClick={() => handleSort(fighter1, fighter2)}
-        >
-          {isRunning ? "RUNNING..." : "START"}
-        </button>
+        {/* <-- שינוי 5: עטיפת כפתורי ה-START וה-RESET יחד במרכז הזירה */}
+        <div className="center-controls">
+          <button
+            className="start-button"
+            disabled={!fighter1 || !fighter2 || isRunning}
+            onClick={() => handleSort(fighter1, fighter2)}
+          >
+            {isRunning ? "RUNNING" : "START"}
+          </button>
 
-        {/* שינוי 9: הסרת || [] מ-steps והעברת onFinish={handleFighterFinish} */}
+          <button
+            className="reset-button"
+            // disabled={
+            //   !fighter1Data ||
+            //   !fighter2Data ||
+            //   !isRunning ||
+            //   !fighter2 ||
+            //   !fighter1
+            // }
+            onClick={handleReset}
+          >
+            RESET
+          </button>
+        </div>
+
         <Visualizer
           fighterName={fighter2}
           initialArray={array}
@@ -198,7 +226,6 @@ function App() {
           return (
             <div
               key={index}
-              // שינוי 10: הוספת קלאס disabled-card בזמן ריצה
               className={`fighter-card ${isSelected ? "selected" : ""} ${
                 isRunning ? "disabled-card" : ""
               }`}

@@ -270,3 +270,43 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* סידור כפתורי START ו-RESET אחד מתחת לשני במרכז הזירה */
+.center-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-button {
+  background-color: #1b4f72;
+  color: white;
+  padding: 0.6rem 2.1rem;
+  margin-top: 1rem;
+  width: 7.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #353f45;
+  /* border-radius: 0.4rem; */
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.reset-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.reset-button:disabled {
+  background-color: #7f8c8d;
+  border-color: #515a5a;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* .start-button {
+  width: 7.7rem;
+} */
