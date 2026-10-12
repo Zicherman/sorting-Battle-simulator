@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.battlesimulator.sortingAlgorithms.AbstractSortingAlgorithm;
 import com.battlesimulator.sortingAlgorithms.BubbleSort;
+import com.battlesimulator.sortingAlgorithms.BucketSort;
 import com.battlesimulator.sortingAlgorithms.HeapSort;
 import com.battlesimulator.sortingAlgorithms.InsertionSort;
+import com.battlesimulator.sortingAlgorithms.MergeSort;
 import com.battlesimulator.sortingAlgorithms.QuickSort;
+import com.battlesimulator.sortingAlgorithms.RadixSort;
 import com.battlesimulator.sortingAlgorithms.SelectionSort;
+import com.battlesimulator.sortingAlgorithms.ShellSort;
+
 
 @RestController
 @CrossOrigin 
@@ -108,6 +113,78 @@ public class TestController {
         response.setComparisons(heapSort.getComparisons());
         response.setSwaps(heapSort.getSwaps());
         response.setExecutionTime(heapSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/shell")
+    public SortResponse processShellSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> shellSort = new ShellSort<>();
+        shellSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(shellSort.getSteps());
+        response.setComparisons(shellSort.getComparisons());
+        response.setSwaps(shellSort.getSwaps());
+        response.setExecutionTime(shellSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/merge")
+    public SortResponse processMergeSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> mergeSort = new MergeSort<>();
+        mergeSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(mergeSort.getSteps());
+        response.setComparisons(mergeSort.getComparisons());
+        response.setSwaps(mergeSort.getSwaps());
+        response.setExecutionTime(mergeSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/bucket")
+    public SortResponse processBucketSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> bucketSort = new BucketSort<>();
+        bucketSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(bucketSort.getSteps());
+        response.setComparisons(bucketSort.getComparisons());
+        response.setSwaps(bucketSort.getSwaps());
+        response.setExecutionTime(bucketSort.getExecutionTime());
+
+        return response;
+    }
+
+        @PostMapping ("/api/sort/radix")
+    public SortResponse processRadixSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> radixSort = new RadixSort<>();
+        radixSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(radixSort.getSteps());
+        response.setComparisons(radixSort.getComparisons());
+        response.setSwaps(radixSort.getSwaps());
+        response.setExecutionTime(radixSort.getExecutionTime());
 
         return response;
     }
