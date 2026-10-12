@@ -10,6 +10,10 @@ const apiMap = {
   "Insertion Sort": "insertion",
   "Heap Sort": "heap",
   "Quick Sort": "quick",
+  "Shell Sort": "shell",
+  "Merge Sort": "merge",
+  "Bucket Sort": "bucket",
+  "Radix Sort": "radix",
 };
 
 const algorithms = [
@@ -18,6 +22,10 @@ const algorithms = [
   "Insertion Sort",
   "Heap Sort",
   "Quick Sort",
+  "Shell Sort",
+  "Merge Sort",
+  "Bucket Sort",
+  "Radix Sort",
 ];
 
 function App() {

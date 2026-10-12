@@ -12,7 +12,7 @@
 
 /* אזור הזנת נתונים (עליון) */
 .data-input {
-  background-color: #21618C;
+  background-color: #21618c;
   color: white;
   padding: 15px;
   border-radius: 4px;
@@ -35,13 +35,13 @@
 }
 
 .animation-screen {
-  background-color: #2874A6;
+  background-color: #2874a6;
   height: 300px;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #1B4F72;
+  border: 2px solid #1b4f72;
 }
 
 .stats-bar {
@@ -50,21 +50,21 @@
 }
 
 .stat-box {
-  background-color: #3498DB;
+  background-color: #3498db;
   color: white;
   padding: 10px 20px;
-  border: 2px solid #1B4F72;
+  border: 2px solid #1b4f72;
   font-weight: bold;
 }
 
 /* כפתור ה-Start */
 .start-button {
-  background-color: #21618C;
+  background-color: #21618c;
   color: white;
   padding: 20px 30px;
   font-size: 1.2rem;
   font-weight: bold;
-  border: 2px solid #1B4F72;
+  border: 2px solid #1b4f72;
   cursor: pointer;
   transition: transform 0.1s;
 }
@@ -82,16 +82,36 @@
 }
 
 .fighter-card {
-  background-color: #21618C;
+  background-color: #21618c;
   color: white;
   padding: 30px 20px;
-  border: 2px solid #1B4F72;
+  border: 2px solid #1b4f72;
   cursor: pointer;
   min-width: 120px;
   transition: all 0.2s;
 }
 
 .fighter-card:hover {
-  background-color: #2874A6;
+  background-color: #2874a6;
   box-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
+}
+
+.algorithm-selector {
+  display: flex;
+  flex-wrap: wrap; /* מאפשר לכפתורים לרדת לשורה שנייה במקום להיחתך בצדדים */
+  justify-content: center; /* ממרכז את השורות באמצע המסך */
+  align-items: center;
+  gap: 0.75rem; /* מרווח אחיד וקטן יותר בין הכפתורים */
+  width: 100%;
+  max-width: 1050px; /* מסדר את 9 הכפתורים ב-2 שורות יפות (5 למעלה ו-4 למטה) */
+  margin: 0 auto;
+  padding: 0.5rem 0;
+}
+
+.fighter-card {
+  width: auto; /* מבטל רוחב קשיח ישן אם הוגדר ב-index.css */
+  min-width: 130px; /* גודל קומפקטי ואחיד לכל כפתור */
+  padding: 0.65rem 1.1rem; /* הקטנת הריווח הפנימי */
+  font-size: 0.95rem; /* הקטנה קלה של הפונט */
+  box-sizing: border-box;
 }
