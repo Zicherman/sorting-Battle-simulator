@@ -38,6 +38,8 @@ function Visualizer({
   executionTime,
   onFinish,
   speed = 40,
+  isPaused,
+  restartSignal,
 }) {
   const [displayArray, setDisplayArray] = useState([]);
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -76,12 +78,13 @@ function Visualizer({
     setStepType(null);
     setSwaps(0);
     setComparisons(0);
-  }, [initialArray, fighterName, steps]);
+  }, [initialArray, fighterName, steps, restartSignal]);
 
   // מנוע האנימציה
   useEffect(() => {
     // ירוץ רק אם יש צעדים אמיתיים שנשלחו מלחיצה על START
     if (!steps || steps.length === 0) return;
+    if (isPaused) return;
 
     // סיום כל הצעדים
     if (currentStepIdx >= steps.length) {
@@ -126,7 +129,7 @@ function Visualizer({
     }, speed);
 
     return () => clearTimeout(timer);
-  }, [steps, currentStepIdx, speed, stepType, onFinish]);
+  }, [steps, currentStepIdx, speed, stepType, onFinish, isPaused]);
 
   // פונקציה שקובעת את צבע העמודה בכל רגע נתון
   const getBarStatus = (idx) => {

@@ -40,6 +40,9 @@ function App() {
   const [activeRunners, setActiveRunners] = useState(0);
   const isRunning = activeRunners > 0;
 
+  const [isPaused, setIsPaused] = useState(false);
+  const [restartSignal, setRestartSignal] = useState(0);
+
   // פונקציה שמייצרת מערך חדש (מקבלת גודל אופציונלי כדי לתמוך בעזיבת הסליידר)
   const generateArray = (customSize = arraySize) => {
     if (isRunning) return;
@@ -79,6 +82,13 @@ function App() {
     setFighter2Data(null); // מוחק את הצעדים של לוחם 2 (מאפס את ה-Visualizer שלו)
     setFighter1(null);
     setFighter2(null);
+    setIsPaused(false);
+  };
+
+  const handleRestartBattle = () => {
+    setRestartSignal((prev) => prev + 1); // Triggers the useEffect in Visualizer to reset steps
+    setIsPaused(false); // Unpause if paused
+    setActiveRunners(2); // Set runners back to active
   };
 
   const toggleFighter = (algName) => {
@@ -102,7 +112,7 @@ function App() {
 
   const handleSort = async (alg1, alg2) => {
     if (!alg1 || !alg2 || isRunning) return;
-
+    setIsPaused(false);
     setFighter1Data(null);
     setFighter2Data(null);
 
@@ -150,7 +160,6 @@ function App() {
         <div className="input-controls">
           <div className="size-control">
             <label htmlFor="arraySize">Array Size: {arraySize}</label>
-            {/* <-- שינוי 4: הוספת onMouseUp ו-onTouchEnd לסליידר */}
             <input
               type="range"
               id="arraySize"
@@ -182,31 +191,116 @@ function App() {
           steps={fighter1Data?.steps}
           executionTime={fighter1Data?.executionTime}
           onFinish={handleFighterFinish}
+          isPaused={isPaused}
+          restartSignal={restartSignal}
         />
 
-        {/* <-- שינוי 5: עטיפת כפתורי ה-START וה-RESET יחד במרכז הזירה */}
-        <div className="center-controls">
+        {/* <-- מרכז הזירה - כפתורים --> */}
+        <div
+          className="center-controls"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            alignItems: "center",
+          }}
+        >
+          {/* כפתור ה-START נשאר גדול וברור */}
           <button
             className="start-button"
             disabled={!fighter1 || !fighter2 || isRunning}
             onClick={() => handleSort(fighter1, fighter2)}
+            style={{ width: "100%" }}
           >
             {isRunning ? "RUNNING" : "START"}
           </button>
 
-          <button
-            className="reset-button"
-            // disabled={
-            //   !fighter1Data ||
-            //   !fighter2Data ||
-            //   !isRunning ||
-            //   !fighter2 ||
-            //   !fighter1
-            // }
-            onClick={handleReset}
-          >
-            RESET
-          </button>
+          {/* שורת כפתורי הפעולות הקטנים - תופיע רק כשיש מידע על המסך */}
+          {(fighter1Data || fighter2Data) && (
+            <div
+              style={{ display: "flex", gap: "12px", justifyContent: "center" }}
+            >
+              {/* CLEAR (פח אשפה) */}
+              <button
+                className="icon-button"
+                onClick={handleReset}
+                title="Clear Arena"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+
+              {/* PAUSE / RESUME (השהיה/ניגון) */}
+              <button
+                className="icon-button"
+                onClick={() => setIsPaused(!isPaused)}
+                title={isPaused ? "Resume" : "Pause"}
+              >
+                {isPaused ? (
+                  // אייקון Play
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                ) : (
+                  // אייקון Pause
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                  </svg>
+                )}
+              </button>
+
+              {/* RESTART (חץ רענון) */}
+              <button
+                className="icon-button"
+                onClick={handleRestartBattle}
+                title="Restart Battle"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <path d="M3 3v5h5"></path>
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
 
         <Visualizer
@@ -215,6 +309,8 @@ function App() {
           steps={fighter2Data?.steps}
           executionTime={fighter2Data?.executionTime}
           onFinish={handleFighterFinish}
+          isPaused={isPaused}
+          restartSignal={restartSignal}
         />
       </div>
 

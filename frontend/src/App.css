@@ -310,3 +310,45 @@
 /* .start-button {
   width: 7.7rem;
 } */
+
+.pause-button {
+  background-color: #1b4f72;
+  color: white;
+  padding: 0.6rem 2.1rem;
+  margin-top: 1rem;
+  width: 7.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #353f45;
+  /* border-radius: 0.4rem; */
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.icon-button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background-color: #2c3e50; /* תשנה לצבע שמתאים לשאר הכפתורים שלך */
+  color: white;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.icon-button:hover {
+  background-color: #34495e;
+  transform: translateY(-2px); /* אפקט ריחוף קל */
+}
+
+.icon-button:active {
+  transform: translateY(0) scale(0.95); /* אפקט לחיצה */
+}
