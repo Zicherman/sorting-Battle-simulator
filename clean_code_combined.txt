@@ -1,0 +1,1819 @@
+
+------------------------------------------------------------
+File Name: BattleSimulatorApplication.java
+Full Path: .\backend\src\main\java\com\battlesimulator\BattleSimulatorApplication.java
+------------------------------------------------------------
+
+package com.battlesimulator;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BattleSimulatorApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(BattleSimulatorApplication.class, args);
+    }
+}
+
+------------------------------------------------------------
+File Name: SortRequest.java
+Full Path: .\backend\src\main\java\com\battlesimulator\SortRequest.java
+------------------------------------------------------------
+
+package com.battlesimulator;
+
+public class SortRequest {
+    private Integer[] array;
+
+    public Integer[] getArray() {
+        return array;
+    }
+
+    public void setArray(Integer[] array) {
+        this.array = array;
+    }
+}
+
+
+------------------------------------------------------------
+File Name: SortResponse.java
+Full Path: .\backend\src\main\java\com\battlesimulator\SortResponse.java
+------------------------------------------------------------
+
+package com.battlesimulator;
+
+import java.util.List;
+
+import com.battlesimulator.sortingAlgorithms.SortStep;
+
+public class SortResponse {
+    private Integer[] returnArray;
+    private List<SortStep> steps;
+    private long swaps;
+    private long comparisons;
+    private long executionTime;
+
+    public Integer[] getReturnArray() {
+        return returnArray;
+    }
+
+    public List<SortStep> getSteps() {
+        return steps;
+    }
+
+    public long getComparisons() {
+        return comparisons;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public long getSwaps() {
+        return swaps;
+    }
+
+    public void setReturnArray(Integer[] returnArray) {
+        this.returnArray = returnArray;
+    }
+
+    public void setSteps(List<SortStep> steps) {
+        this.steps = steps;
+    }
+
+    public void setComparisons(long comparisons) {
+        this.comparisons = comparisons;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
+    }
+
+    public void setSwaps(long swaps) {
+        this.swaps = swaps;
+    }
+}
+
+
+------------------------------------------------------------
+File Name: TestController.java
+Full Path: .\backend\src\main\java\com\battlesimulator\TestController.java
+------------------------------------------------------------
+
+package com.battlesimulator;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.battlesimulator.sortingAlgorithms.AbstractSortingAlgorithm;
+import com.battlesimulator.sortingAlgorithms.BubbleSort;
+import com.battlesimulator.sortingAlgorithms.BucketSort;
+import com.battlesimulator.sortingAlgorithms.HeapSort;
+import com.battlesimulator.sortingAlgorithms.InsertionSort;
+import com.battlesimulator.sortingAlgorithms.MergeSort;
+import com.battlesimulator.sortingAlgorithms.QuickSort;
+import com.battlesimulator.sortingAlgorithms.RadixSort;
+import com.battlesimulator.sortingAlgorithms.SelectionSort;
+import com.battlesimulator.sortingAlgorithms.ShellSort;
+
+
+@RestController
+@CrossOrigin 
+public class TestController {
+
+    @GetMapping("/api/test")
+    public String sayHello() {
+        return "The Java Backend is alive!";
+    }
+
+    @PostMapping("/api/sort/quick")
+    public SortResponse processQuickSort(@RequestBody SortRequest request) {
+        
+        Integer[] arrayToSort = request.getArray();
+        AbstractSortingAlgorithm<Integer> quickSort = new QuickSort<>();
+        quickSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(quickSort.getSteps());
+        response.setComparisons(quickSort.getComparisons());
+        response.setSwaps(quickSort.getSwaps());
+        response.setExecutionTime(quickSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/bubble")
+    public SortResponse processBubbleSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> bubbleSort = new BubbleSort<>();
+        bubbleSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(bubbleSort.getSteps());
+        response.setComparisons(bubbleSort.getComparisons());
+        response.setSwaps(bubbleSort.getSwaps());
+        response.setExecutionTime(bubbleSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/selection")
+    public SortResponse processSelectionSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> selectionSort = new SelectionSort<>();
+        selectionSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(selectionSort.getSteps());
+        response.setComparisons(selectionSort.getComparisons());
+        response.setSwaps(selectionSort.getSwaps());
+        response.setExecutionTime(selectionSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/insertion")
+    public SortResponse processInsertionSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> insertionSort = new InsertionSort<>();
+        insertionSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(insertionSort.getSteps());
+        response.setComparisons(insertionSort.getComparisons());
+        response.setSwaps(insertionSort.getSwaps());
+        response.setExecutionTime(insertionSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/heap")
+    public SortResponse processHeapSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> heapSort = new HeapSort<>();
+        heapSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(heapSort.getSteps());
+        response.setComparisons(heapSort.getComparisons());
+        response.setSwaps(heapSort.getSwaps());
+        response.setExecutionTime(heapSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/shell")
+    public SortResponse processShellSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> shellSort = new ShellSort<>();
+        shellSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(shellSort.getSteps());
+        response.setComparisons(shellSort.getComparisons());
+        response.setSwaps(shellSort.getSwaps());
+        response.setExecutionTime(shellSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/merge")
+    public SortResponse processMergeSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> mergeSort = new MergeSort<>();
+        mergeSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(mergeSort.getSteps());
+        response.setComparisons(mergeSort.getComparisons());
+        response.setSwaps(mergeSort.getSwaps());
+        response.setExecutionTime(mergeSort.getExecutionTime());
+
+        return response;
+    }
+
+    @PostMapping ("/api/sort/bucket")
+    public SortResponse processBucketSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> bucketSort = new BucketSort<>();
+        bucketSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(bucketSort.getSteps());
+        response.setComparisons(bucketSort.getComparisons());
+        response.setSwaps(bucketSort.getSwaps());
+        response.setExecutionTime(bucketSort.getExecutionTime());
+
+        return response;
+    }
+
+        @PostMapping ("/api/sort/radix")
+    public SortResponse processRadixSort(@RequestBody SortRequest request){
+        Integer[] arrayToSort = request.getArray();
+        
+        AbstractSortingAlgorithm<Integer> radixSort = new RadixSort<>();
+        radixSort.sort(arrayToSort);
+
+        SortResponse response = new SortResponse();
+
+        response.setReturnArray(arrayToSort);
+        response.setSteps(radixSort.getSteps());
+        response.setComparisons(radixSort.getComparisons());
+        response.setSwaps(radixSort.getSwaps());
+        response.setExecutionTime(radixSort.getExecutionTime());
+
+        return response;
+    }
+}
+
+------------------------------------------------------------
+File Name: ArrayGenerator.java
+Full Path: .\backend\src\main\java\com\battlesimulator\arrayGenerators\ArrayGenerator.java
+------------------------------------------------------------
+
+package com.battlesimulator.arrayGenerators;
+
+import java.util.Random;
+
+//this is will be helper class that provide static methods use to generate arrays
+public class ArrayGenerator {
+    public static final int DEFAULT_SIZE = 10; 
+    public static final int MIN_RANGE = 1;
+    public static final int MAX_RANGE = 30;
+    
+    //we dont need to make instances of this class
+    private ArrayGenerator() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    //creats random values array with spesific size
+    public static Integer[] randomGenerate(int size) {
+        Integer[] array = new Integer[size];
+        Random rand = new Random();
+
+        for (int i = 0; i < size; i++) {
+            array[i] = rand.nextInt(MAX_RANGE - MIN_RANGE + 1) + MIN_RANGE;
+        }
+        return array;
+    }
+    
+    public static Integer[] randomGenerate() {
+        return randomGenerate(DEFAULT_SIZE);
+    }
+
+    //TO-DO - adding manual generating methods
+}
+
+------------------------------------------------------------
+File Name: AbstractSortingAlgorithm.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\AbstractSortingAlgorithm.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbstractSortingAlgorithm <T extends Comparable<T>> {
+    private String name;
+    private long comparisons;
+    private long executionTime;
+    private long swaps;
+    private List<SortStep> steps;
+
+    public AbstractSortingAlgorithm(String name){
+        this.name = name;
+        this.steps = new ArrayList<>();
+    }
+
+    protected void swap(T[] arr, int i, int j) {
+       T temp;
+       temp = arr[i];
+       arr[i] = arr[j];
+       arr[j] = temp; 
+       swaps++;
+       steps.add(new SortStep(StepType.SWAP, i, j));
+    }
+
+    // הוספנו: פונקציה ייעודית לדריסת תא במערך (עבור Merge, Radix, Bucket)
+    protected void overwrite(T[] arr, int index, T value) {
+        arr[index] = value;
+        swaps++; // אנחנו סופרים פעולת כתיבה/דריסה בתור "swap" כדי שזה יופיע בסטטיסטיקה במסך
+        steps.add(new SortStep(StepType.OVERWRITE, index, (Integer) value));
+    }
+
+    protected int compare(T[] array, int i, int j){
+        comparisons++;
+        steps.add(new SortStep(StepType.COMPARISON, i, j));
+        return array[i].compareTo(array[j]);
+    }
+
+    public abstract void performSort(T[] array);
+
+    public void sort(T[] array){
+        swaps = 0;
+        comparisons = 0;
+        steps.clear();
+        
+        long startTime = System.nanoTime();
+        performSort(array);
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
+    }
+
+    public long getComparisons() {
+        return comparisons;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<SortStep> getSteps() {
+        return steps;
+    }
+
+    public long getSwaps() {
+        return swaps;
+    }
+}
+
+------------------------------------------------------------
+File Name: BubbleSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\BubbleSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class BubbleSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public BubbleSort() {
+        super("Bubble Sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        int n = array.length;
+        // We only need to do n-1 passes
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1 - i; j++) {
+                // Must check > 0, not == 1
+                if (compare(array, j, j + 1) > 0) {
+                    swap(array, j, j + 1);
+                }
+            }
+        }
+    }
+}
+
+
+------------------------------------------------------------
+File Name: BucketSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\BucketSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class BucketSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public BucketSort() {
+        super("Bucket sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        int n = array.length;
+        if (n <= 1) return;
+
+        // מציאת הערך המקסימלי כדי לדעת איך לחלק לדליים
+        int max = ((Number) array[0]).intValue();
+        for (int i = 1; i < n; i++) {
+            int val = ((Number) array[i]).intValue();
+            if (val > max) max = val;
+        }
+
+        // ניצור דליים (בדרך כלל כשורש של כמות האיברים)
+        int bucketCount = (int) Math.sqrt(n);
+        if (bucketCount < 1) bucketCount = 1;
+        
+        List<List<T>> buckets = new ArrayList<>(bucketCount);
+        for (int i = 0; i < bucketCount; i++) {
+            buckets.add(new ArrayList<>());
+        }
+
+        // חלוקת האיברים מהמערך לתוך הדליים המתאימים
+        for (int i = 0; i < n; i++) {
+            int val = ((Number) array[i]).intValue();
+            int bucketIndex = (val * bucketCount) / (max + 1);
+            buckets.get(bucketIndex).add(array[i]);
+        }
+
+        // מיון של כל דלי בנפרד והחזרתו למערך המקורי
+        int writeIdx = 0;
+        for (int i = 0; i < bucketCount; i++) {
+            List<T> bucket = buckets.get(i);
+            
+            // ממיינים את הדלי הספציפי (ברמה הפנימית)
+            Collections.sort(bucket); 
+            
+            // החלק החשוב שלנו: שופכים את התוכן חזרה למערך בעזרת דריסה (OVERWRITE)
+            for (T targetVal : bucket) {
+                
+                overwrite(array, writeIdx, targetVal); // אין שגיאות steps!
+                writeIdx++;
+                
+            }
+        }
+    }
+}
+
+------------------------------------------------------------
+File Name: HeapSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\HeapSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class HeapSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public HeapSort() {
+        super("Heap sort");
+    }
+
+    public void performSort(T[] array) {
+        int n = array.length;
+
+        // שלב 1: בניית הערימה (Max Heap)
+        // מתחילים מהאבא האחרון (n/2 - 1) ועולים למעלה עד השורש באינדקס 0
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(array, n, i);
+        }
+
+        // שלב 2: שליפה ומיון
+        // רצים מהסוף להתחלה - בכל פעם לוקחים את הכי גדול (שבראש) וזורקים לסוף
+        for (int i = n - 1; i > 0; i--) {
+            swap(array, 0, i); // העברת המקסימום הנוכחי לסוף המערך
+            
+            // תיקון הערימה עבור שאר האיברים שנשארו (הגודל מתכווץ ל-i)
+            heapify(array, i, 0); 
+        }
+    }
+
+    // פונקציית העזר: מחלחלת איבר קטן למטה כדי לשמור על חוקיות הערימה
+    private void heapify(T[] array, int n, int i) {
+        int largest = i; // מניחים כרגע שהאבא הוא הכי גדול
+        int left = 2 * i + 1; // אינדקס הילד השמאלי
+        int right = 2 * i + 2; // אינדקס הילד הימני
+
+        if (left < n && compare(array, left, largest) > 0) {
+            largest = left;
+        }
+
+        if (right < n && compare(array, right, largest) > 0) {
+            largest = right;
+        }
+
+        if (largest != i) {
+            swap(array, i, largest);
+            heapify(array, n, largest);
+        }
+    }
+}
+
+------------------------------------------------------------
+File Name: InsertionSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\InsertionSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class InsertionSort <T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+    
+    public InsertionSort(){
+        super("Insertion sort");
+    }
+
+    @Override 
+    public void performSort(T[] array){
+        for(int i=1; i < array.length; i++){
+            for(int j=i; j>0; j--){
+                if (compare(array, j-1, j)>0) {
+                    swap(array, j-1, j);
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+------------------------------------------------------------
+File Name: MergeSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\MergeSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MergeSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public MergeSort() {
+        super("Merge sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        if (array == null || array.length <= 1) return;
+        mergeSort(array, 0, array.length - 1);
+    }
+
+    private void mergeSort(T[] array, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+            mergeLinear(array, left, mid, right);
+        }
+    }
+
+    private void mergeLinear(T[] array, int left, int mid, int right) {
+        // איחוד ליניארי קלאסי לתוך רשימת עזר
+        List<T> merged = new ArrayList<>(right - left + 1);
+        int i = left;
+        int j = mid + 1;
+
+        while (i <= mid && j <= right) {
+            if (compare(array, i, j) <= 0) {
+                merged.add(array[i]);
+                i++;
+            } else {
+                merged.add(array[j]);
+                j++;
+            }
+        }
+
+        while (i <= mid) {
+            merged.add(array[i]);
+            i++;
+        }
+
+        while (j <= right) {
+            merged.add(array[j]);
+            j++;
+        }
+
+        // השינוי שלנו: במקום לחפש איפה האיבר נמצא במערך ולהחליף, 
+        // פשוט עוברים על רשימת העזר ודורסים את המערך המקורי!
+        for (int k = 0; k < merged.size(); k++) {
+            int writeIdx = left + k;
+            T targetVal = merged.get(k);
+            
+            // שימוש בפונקציה החדשה שעושה הכל: מעדכנת, סופרת ומתעדת אנימציה של OVERWRITE
+            overwrite(array, writeIdx, targetVal); 
+        }
+    }
+}
+
+------------------------------------------------------------
+File Name: QuickSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\QuickSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+import java.util.Random;
+
+public class QuickSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+    
+    private Random rand;
+    
+    public QuickSort() {
+        super("Quick Sort");
+        this.rand = new Random();
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        quickSort(array, 0, array.length - 1);
+    }
+
+    private void quickSort(T[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(array, low, high);
+
+            quickSort(array, low, pivotIndex - 1);
+            quickSort(array, pivotIndex + 1, high);
+        }
+    }
+    
+    private int partition(T[] array, int low, int high) {
+        //Pick a random index between low and high (inclusive)
+        int randomPivotIndex = rand.nextInt(high - low + 1) + low;
+        
+        //Swap the random element with the last element (Lomuto partition).
+        swap(array, randomPivotIndex, high);
+
+        //Standard Lomuto partitioning
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (compare(array, j, high) <= 0) {
+                i++;
+                swap(array, i, j);
+            }
+        }
+        //return the pivot to his place and return the pivot position
+        swap(array, i + 1, high);
+        return i + 1;
+    }
+}
+
+
+------------------------------------------------------------
+File Name: RadixSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\RadixSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RadixSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public RadixSort() {
+        super("Radix sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        int n = array.length;
+        if (n <= 1) return;
+
+        int max = ((Number) array[0]).intValue();
+        for (int i = 1; i < n; i++) {
+            int val = ((Number) array[i]).intValue();
+            if (val > max) max = val;
+        }
+
+        // מעבר על כל ספרה (אחדות, עשרות...)
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            
+            // חלוקה ל-10 דליים
+            List<List<T>> buckets = new ArrayList<>(10);
+            for (int d = 0; d < 10; d++) {
+                buckets.add(new ArrayList<>());
+            }
+
+            // הכנסת האיברים לדליים לפי הספרה הנוכחית
+            for (int i = 0; i < n; i++) {
+                int val = ((Number) array[i]).intValue();
+                int digit = (val / exp) % 10;
+                buckets.get(digit).add(array[i]);
+            }
+
+            // החזרת האיברים למערך - דריסה חלקה וישירה
+            int writeIdx = 0;
+            for (int d = 0; d < 10; d++) {
+                for (T targetVal : buckets.get(d)) {
+                    
+                    // כאן אנחנו קוראים לפונקציה החדשה שיצרת ב-AbstractSortingAlgorithm
+                    // היא מעדכנת את המערך, סופרת את הפעולה ומתעדת את צעד האנימציה (OVERWRITE)
+                    overwrite(array, writeIdx, targetVal);
+                    
+                    writeIdx++;
+                }
+            }
+        }
+    }
+}
+
+------------------------------------------------------------
+File Name: SelectionSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\SelectionSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class SelectionSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+
+    public SelectionSort() {
+        super("Selection Sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        int n = array.length;
+        // We only need to do n-1 passes
+        for (int i = 0; i < n - 1; i++) {
+            
+            int maxIndex = 0;
+            for (int j = 1; j <= n - 1 - i; j++) {
+                if (compare(array, j, maxIndex) > 0) {
+                    maxIndex = j;
+                }
+            }
+        swap(array, maxIndex, n - 1 - i);    
+        }
+    }
+}
+
+
+------------------------------------------------------------
+File Name: ShellSort.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\ShellSort.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class ShellSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
+    
+    public ShellSort() {
+        super("Shell sort");
+    }
+
+    @Override
+    public void performSort(T[] array) {
+        int n = array.length;
+
+        // Start with a big gap, then reduce the gap by half each iteration
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            
+            // Perform a gapped insertion sort for this gap size
+            for (int i = gap; i < n; i++) {
+                int j = i;
+                
+                // Compare elements that are 'gap' distance apart and swap if needed
+                while (j >= gap && compare(array, j - gap, j) > 0) {
+                    swap(array, j - gap, j);
+                    j -= gap;
+                }
+            }
+        }
+    }
+}
+
+------------------------------------------------------------
+File Name: SortStep.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\SortStep.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public class SortStep {
+    StepType type;
+    int indexi;
+    int indexj;
+    Integer value; // הוספנו: שמירת הערך לדריסה
+
+    // בנאי מקורי להשוואות והחלפות (SWAP/COMPARISON)
+    public SortStep(StepType type, int i, int j) {
+        this.type = type;
+        this.indexi = i;
+        this.indexj = j;
+    }
+
+    // הוספנו: בנאי חדש ייעודי לדריסות (OVERWRITE)
+    public SortStep(StepType type, int i, Integer value) {
+        this.type = type;
+        this.indexi = i;
+        this.indexj = -1; // לא רלוונטי בדריסה
+        this.value = value;
+    }
+
+    public StepType getType() {
+        return type;
+    }
+
+    public int getIndexi() {
+        return indexi;
+    }
+
+    public int getIndexj() {
+        return indexj;
+    }
+
+    // הוספנו: גישה לערך החדש
+    public Integer getValue() {
+        return value;
+    }
+}
+
+------------------------------------------------------------
+File Name: StepType.java
+Full Path: .\backend\src\main\java\com\battlesimulator\sortingAlgorithms\StepType.java
+------------------------------------------------------------
+
+package com.battlesimulator.sortingAlgorithms;
+
+public enum StepType{
+    COMPARISON,
+    SWAP,
+    OVERWRITE
+}
+
+------------------------------------------------------------
+File Name: index.html
+Full Path: .\frontend\index.html
+------------------------------------------------------------
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>battle-simulator-ui</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+
+------------------------------------------------------------
+File Name: vite.config.js
+Full Path: .\frontend\vite.config.js
+------------------------------------------------------------
+
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+
+
+------------------------------------------------------------
+File Name: App.css
+Full Path: .\frontend\src\App.css
+------------------------------------------------------------
+
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  position: relative;
+
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
+
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .framework,
+  .vite {
+    position: absolute;
+  }
+
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+
+/* האפקט הזוהר לאלגוריתם שנבחר */
+.fighter-card.selected {
+  background-color: #2874a6;
+  border-color: #5dade2;
+  box-shadow: 0 0 15px rgba(93, 173, 226, 0.9);
+}
+
+.fighter-card:hover {
+  transform: translateY(-2px); /* מקפיץ אותו קצת למעלה */
+}
+
+/* כיבוי כפתור ה-Start אם אין 2 לוחמים */
+.start-button:disabled {
+  background-color: #7f8c8d;
+  border-color: #515a5a;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* עיצוב אזור הקלט והסליידר */
+.input-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+
+.size-control {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.size-control input[type="range"] {
+  cursor: pointer;
+  width: 150px;
+}
+
+.generate-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.generate-btn:hover {
+  background-color: #2980b9;
+}
+
+.app-container {
+  width: 92vw; /* תופס 92% מרוחב המסך */
+  max-width: 1600px; /* גבול עליון למסכי ענק */
+  min-height: 95vh; /* מתפרס על פני גובה המסך */
+  margin: 0 auto;
+  padding: 1.5vh 2vw;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2vh;
+}
+
+.animation-screen {
+  background-color: #2874a6;
+  height: 38vh; /* תמיד 38% מגובה המסך במקום 300px קבוע! */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.15rem solid #1b4f72;
+  border-radius: 0.4rem;
+}
+
+.generate-btn:disabled,
+.fighter-card.disabled-card {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* סידור כפתורי START ו-RESET אחד מתחת לשני במרכז הזירה */
+.center-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-button {
+  background-color: #1b4f72;
+  color: white;
+  padding: 0.6rem 2.1rem;
+  margin-top: 1rem;
+  width: 7.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #353f45;
+  /* border-radius: 0.4rem; */
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.reset-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.reset-button:disabled {
+  background-color: #7f8c8d;
+  border-color: #515a5a;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* .start-button {
+  width: 7.7rem;
+} */
+
+
+------------------------------------------------------------
+File Name: App.jsx
+Full Path: .\frontend\src\App.jsx
+------------------------------------------------------------
+
+// frontend/src/App.jsx
+import { useState, useEffect, useCallback } from "react";
+import Visualizer from "./Visualizer";
+import "./App.css";
+
+const apiMap = {
+  "Bubble Sort": "bubble",
+  "Selection Sort": "selection",
+  "Insertion Sort": "insertion",
+  "Heap Sort": "heap",
+  "Quick Sort": "quick",
+  "Shell Sort": "shell",
+  "Merge Sort": "merge",
+  "Bucket Sort": "bucket",
+  "Radix Sort": "radix",
+};
+
+const algorithms = [
+  "Bubble Sort",
+  "Selection Sort",
+  "Insertion Sort",
+  "Heap Sort",
+  "Quick Sort",
+  "Shell Sort",
+  "Merge Sort",
+  "Bucket Sort",
+  "Radix Sort",
+];
+
+function App() {
+  const [array, setArray] = useState([]);
+  const [arraySize, setArraySize] = useState(20);
+
+  const [fighter1, setFighter1] = useState(null);
+  const [fighter2, setFighter2] = useState(null);
+
+  const [fighter1Data, setFighter1Data] = useState(null);
+  const [fighter2Data, setFighter2Data] = useState(null);
+
+  const [activeRunners, setActiveRunners] = useState(0);
+  const isRunning = activeRunners > 0;
+
+  // פונקציה שמייצרת מערך חדש (מקבלת גודל אופציונלי כדי לתמוך בעזיבת הסליידר)
+  const generateArray = (customSize = arraySize) => {
+    if (isRunning) return;
+    setActiveRunners(0);
+    setFighter1Data(null);
+    setFighter2Data(null);
+
+    const newArray = [];
+    for (let i = 0; i < customSize; i++) {
+      newArray.push(Math.floor(Math.random() * 96) + 5);
+    }
+    setArray(newArray);
+  };
+
+  // רץ פעם אחת בלבד בטעינת האפליקציה
+  useEffect(() => {
+    generateArray(arraySize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // <-- שינוי 1: בזמן הגרירה מעדכנים רק את המספר בתצוגה (בלי לקרוא ל-generateArray)
+  const handleSizeChange = (e) => {
+    if (isRunning) return;
+    setArraySize(Number(e.target.value));
+  };
+
+  // <-- שינוי 2: פונקציה שנקראת רק כשעוזבים את הלחיצה על הסליידר!
+  const handleSliderRelease = () => {
+    if (isRunning) return;
+    generateArray(arraySize);
+  };
+
+  // <-- שינוי 3: פונקציית Reset שמפסיקה את הקרב ומחזירה את המערך למצבו ההתחלתי
+  const handleReset = () => {
+    setActiveRunners(0); // עוצר את מצב הריצה ומשחרר כפתורים
+    setFighter1Data(null); // מוחק את הצעדים של לוחם 1 (מאפס את ה-Visualizer שלו)
+    setFighter2Data(null); // מוחק את הצעדים של לוחם 2 (מאפס את ה-Visualizer שלו)
+    setFighter1(null);
+    setFighter2(null);
+  };
+
+  const toggleFighter = (algName) => {
+    if (isRunning) return;
+    setFighter1Data(null);
+    setFighter2Data(null);
+    if (fighter1 === algName) {
+      setFighter1(null);
+    } else if (fighter2 === algName) {
+      setFighter2(null);
+    } else if (!fighter1) {
+      setFighter1(algName);
+    } else if (!fighter2) {
+      setFighter2(algName);
+    }
+  };
+
+  const handleFighterFinish = useCallback(() => {
+    setActiveRunners((prev) => Math.max(0, prev - 1));
+  }, []);
+
+  const handleSort = async (alg1, alg2) => {
+    if (!alg1 || !alg2 || isRunning) return;
+
+    setFighter1Data(null);
+    setFighter2Data(null);
+
+    const endpoint1 = apiMap[alg1];
+    const endpoint2 = apiMap[alg2];
+
+    try {
+      const request1 = fetch(`http://localhost:8080/api/sort/${endpoint1}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ array: array }),
+      });
+      const request2 = fetch(`http://localhost:8080/api/sort/${endpoint2}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ array: array }),
+      });
+
+      const [response1, response2] = await Promise.all([request1, request2]);
+
+      const [data1, data2] = await Promise.all([
+        response1.json(),
+        response2.json(),
+      ]);
+
+      setFighter1Data(data1);
+      setFighter2Data(data2);
+      setActiveRunners(2);
+    } catch (err) {
+      console.error("Error fetching sort data:", err);
+      setActiveRunners(0);
+    }
+  };
+
+  return (
+    <div className="app-container">
+      <h1>Sorting Algorithms Battle Simulator</h1>
+
+      {/* data input section */}
+      <div className="top-section data-input">
+        <div className="input-controls">
+          <div className="size-control">
+            <label htmlFor="arraySize">Array Size: {arraySize}</label>
+            {/* <-- שינוי 4: הוספת onMouseUp ו-onTouchEnd לסליידר */}
+            <input
+              type="range"
+              id="arraySize"
+              min="5"
+              max="100"
+              value={arraySize}
+              onChange={handleSizeChange}
+              onMouseUp={handleSliderRelease}
+              onTouchEnd={handleSliderRelease}
+              disabled={isRunning}
+            />
+          </div>
+
+          <button
+            onClick={() => generateArray(arraySize)}
+            className="generate-btn"
+            disabled={isRunning}
+          >
+            Generate New Array
+          </button>
+        </div>
+      </div>
+
+      {/* central section */}
+      <div className="middle-section battle-arena">
+        <Visualizer
+          fighterName={fighter1}
+          initialArray={array}
+          steps={fighter1Data?.steps}
+          executionTime={fighter1Data?.executionTime}
+          onFinish={handleFighterFinish}
+        />
+
+        {/* <-- שינוי 5: עטיפת כפתורי ה-START וה-RESET יחד במרכז הזירה */}
+        <div className="center-controls">
+          <button
+            className="start-button"
+            disabled={!fighter1 || !fighter2 || isRunning}
+            onClick={() => handleSort(fighter1, fighter2)}
+          >
+            {isRunning ? "RUNNING" : "START"}
+          </button>
+
+          <button
+            className="reset-button"
+            // disabled={
+            //   !fighter1Data ||
+            //   !fighter2Data ||
+            //   !isRunning ||
+            //   !fighter2 ||
+            //   !fighter1
+            // }
+            onClick={handleReset}
+          >
+            RESET
+          </button>
+        </div>
+
+        <Visualizer
+          fighterName={fighter2}
+          initialArray={array}
+          steps={fighter2Data?.steps}
+          executionTime={fighter2Data?.executionTime}
+          onFinish={handleFighterFinish}
+        />
+      </div>
+
+      {/* bottom section - algorithms selection */}
+      <div className="bottom-section algorithm-selector">
+        {algorithms.map((alg, index) => {
+          const isSelected = fighter1 === alg || fighter2 === alg;
+
+          return (
+            <div
+              key={index}
+              className={`fighter-card ${isSelected ? "selected" : ""} ${
+                isRunning ? "disabled-card" : ""
+              }`}
+              onClick={() => toggleFighter(alg)}
+            >
+              {alg}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
+
+------------------------------------------------------------
+File Name: index.css
+Full Path: .\frontend\src\index.css
+------------------------------------------------------------
+
+/* איפוס בסיסי ויישור למרכז */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* אזור הזנת נתונים (עליון) */
+.data-input {
+  background-color: #21618c;
+  color: white;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+/* זירת הקרב (אמצע) */
+.battle-arena {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+/* פאנל האנימציה והמונים */
+.animation-panel {
+  flex: 1; /* לוקח את כל המקום הפנוי שווה בשווה */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.animation-screen {
+  background-color: #2874a6;
+  height: 300px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #1b4f72;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-box {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid #1b4f72;
+  font-weight: bold;
+}
+
+/* כפתור ה-Start */
+.start-button {
+  background-color: #21618c;
+  color: white;
+  padding: 20px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 2px solid #1b4f72;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.start-button:active {
+  transform: scale(0.95);
+}
+
+/* שורת בחירת הלוחמים (תחתון) */
+.algorithm-selector {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.fighter-card {
+  background-color: #21618c;
+  color: white;
+  padding: 30px 20px;
+  border: 2px solid #1b4f72;
+  cursor: pointer;
+  min-width: 120px;
+  transition: all 0.2s;
+}
+
+.fighter-card:hover {
+  background-color: #2874a6;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
+}
+
+.algorithm-selector {
+  display: flex;
+  flex-wrap: wrap; /* מאפשר לכפתורים לרדת לשורה שנייה במקום להיחתך בצדדים */
+  justify-content: center; /* ממרכז את השורות באמצע המסך */
+  align-items: center;
+  gap: 0.75rem; /* מרווח אחיד וקטן יותר בין הכפתורים */
+  width: 100%;
+  max-width: 1050px; /* מסדר את 9 הכפתורים ב-2 שורות יפות (5 למעלה ו-4 למטה) */
+  margin: 0 auto;
+  padding: 0.5rem 0;
+}
+
+.fighter-card {
+  width: auto; /* מבטל רוחב קשיח ישן אם הוגדר ב-index.css */
+  min-width: 130px; /* גודל קומפקטי ואחיד לכל כפתור */
+  padding: 0.65rem 1.1rem; /* הקטנת הריווח הפנימי */
+  font-size: 0.95rem; /* הקטנה קלה של הפונט */
+  box-sizing: border-box;
+}
+
+
+------------------------------------------------------------
+File Name: main.jsx
+Full Path: .\frontend\src\main.jsx
+------------------------------------------------------------
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+------------------------------------------------------------
+File Name: Visualizer.jsx
+Full Path: .\frontend\src\Visualizer.jsx
+------------------------------------------------------------
+
+import { useState, useEffect, useMemo } from "react";
+import styled from "styled-components";
+
+const BarsContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem;
+  gap: 0.2vw;
+  box-sizing: border-box;
+`;
+
+const ArrayBar = styled.div`
+  flex: 1;
+  height: ${(props) => props.$height}%;
+
+  background-color: ${(props) => {
+    if (props.$status === "SWAP") return "#e74c3c";
+    if (props.$status === "OVERWRITE") return "#9b59b6"; // הוספנו: סגול - דריסת ערך!
+    if (props.$status === "COMPARISON") return "#f1c40f";
+    if (props.$status === "SORTED") return "#2ecc71";
+    return "#ffffff";
+  }};
+
+  transition:
+    height 0.08s ease,
+    background-color 0.05s ease;
+  border-top-left-radius: 0.15rem;
+  border-top-right-radius: 0.15rem;
+`;
+
+function Visualizer({
+  fighterName,
+  initialArray,
+  steps,
+  executionTime,
+  onFinish,
+  speed = 40,
+}) {
+  const [displayArray, setDisplayArray] = useState([]);
+  const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [activeIndices, setActiveIndices] = useState([]);
+  const [stepType, setStepType] = useState(null);
+
+  const [swaps, setSwaps] = useState(0);
+  const [comparisons, setComparisons] = useState(0);
+
+  const targetSortedArray = useMemo(() => {
+    return [...initialArray].sort((a, b) => a - b);
+  }, [initialArray]);
+
+  const lastSwapStepForIndex = useMemo(() => {
+    const map = {};
+    if (!steps) return map;
+    steps.forEach((step, stepIdx) => {
+      if (step.type === "SWAP" || step.type === "OVERWRITE") {
+        const i = step.indexi ?? step.index1 ?? step.i;
+        const j = step.indexj ?? step.index2 ?? step.j;
+        if (i !== undefined && i !== -1) map[i] = stepIdx;
+        if (j !== undefined && j !== -1) map[j] = stepIdx;
+      }
+    });
+    return map;
+  }, [steps]);
+
+  useEffect(() => {
+    setDisplayArray([...initialArray]);
+    setCurrentStepIdx(0);
+    setActiveIndices([]);
+    setStepType(null);
+    setSwaps(0);
+    setComparisons(0);
+  }, [initialArray, fighterName, steps]);
+
+  useEffect(() => {
+    if (!steps || steps.length === 0) return;
+
+    if (currentStepIdx >= steps.length) {
+      if (stepType !== "SORTED") {
+        setActiveIndices([]);
+        setStepType("SORTED");
+        if (onFinish) onFinish();
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const step = steps[currentStepIdx];
+
+      const i = step.indexi ?? step.index1 ?? step.i;
+      const j = step.indexj ?? step.index2 ?? step.j;
+      const val = step.value ?? step.val; // הוספנו: משיכת הערך לדריסה
+      const rawType = step.type ?? step.stepType;
+
+      const normalizedType =
+        rawType === "COMPARISON" || rawType === "COMPARE"
+          ? "COMPARISON"
+          : rawType;
+
+      // הוספנו: אם זו דריסה, רק אינדקס i פעיל. אחרת, i ו-j
+      setActiveIndices(normalizedType === "OVERWRITE" ? [i] : [i, j]);
+      setStepType(normalizedType);
+
+      if (normalizedType === "COMPARISON") {
+        setComparisons((prev) => prev + 1);
+      } else if (normalizedType === "SWAP") {
+        setSwaps((prev) => prev + 1);
+        setDisplayArray((prevArr) => {
+          const newArr = [...prevArr];
+          const temp = newArr[i];
+          newArr[i] = newArr[j];
+          newArr[j] = temp;
+          return newArr;
+        });
+      } else if (normalizedType === "OVERWRITE") {
+        // הוספנו: טיפול באנימציה של דריסה
+        setDisplayArray((prevArr) => {
+          const newArr = [...prevArr];
+          newArr[i] = val; // משנה רק את הגובה של העמודה
+          return newArr;
+        });
+      }
+
+      setCurrentStepIdx((prev) => prev + 1);
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [steps, currentStepIdx, speed, stepType, onFinish]);
+
+  const getBarStatus = (idx) => {
+    if (stepType === "SORTED") return "SORTED";
+    if (activeIndices.includes(idx)) return stepType;
+
+    if (steps && steps.length > 0 && currentStepIdx > 0) {
+      const lastSwap = lastSwapStepForIndex[idx] ?? -1;
+      if (
+        currentStepIdx > lastSwap &&
+        displayArray[idx] === targetSortedArray[idx]
+      ) {
+        return "SORTED";
+      }
+    }
+    return "DEFAULT";
+  };
+
+  return (
+    <div className="animation-panel">
+      <h2>{fighterName || "Waiting for Fighter..."}</h2>
+
+      <div className="animation-screen">
+        {fighterName ? (
+          <BarsContainer>
+            {displayArray.map((value, idx) => (
+              <ArrayBar key={idx} $height={value} $status={getBarStatus(idx)} />
+            ))}
+          </BarsContainer>
+        ) : (
+          <p>Select an algorithm below</p>
+        )}
+      </div>
+
+      <div className="stats-bar">
+        <div className="stat-box">Swap/Write: {swaps}</div>
+        {executionTime !== undefined && stepType === "SORTED" && (
+          <div className="stat-box">
+            Time: {(executionTime / 1000000).toFixed(4)} ms
+          </div>
+        )}
+        <div className="stat-box">Comp: {comparisons}</div>
+      </div>
+    </div>
+  );
+}
+
+export default Visualizer;
+
