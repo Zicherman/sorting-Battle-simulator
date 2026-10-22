@@ -1,7 +1,6 @@
 package com.battlesimulator.sortingAlgorithms;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BucketSort<T extends Comparable<T>> extends AbstractSortingAlgorithm<T> {
@@ -33,25 +32,31 @@ public class BucketSort<T extends Comparable<T>> extends AbstractSortingAlgorith
 
         // חלוקת האיברים מהמערך לתוך הדליים המתאימים
         for (int i = 0; i < n; i++) {
+            // הוספת צעד השוואת דמה כדי שה-Visualizer יאיר את האיבר הנקרא בצהוב
+            compare(array, i, i); 
+            
             int val = ((Number) array[i]).intValue();
             int bucketIndex = (val * bucketCount) / (max + 1);
             buckets.get(bucketIndex).add(array[i]);
         }
 
-        // מיון של כל דלי בנפרד והחזרתו למערך המקורי
+        // שפיכת הדליים חזרה למערך. הם מרוכזים לפי טווחים, אבל עדיין לא ממוינים לגמרי בפנים
         int writeIdx = 0;
         for (int i = 0; i < bucketCount; i++) {
-            List<T> bucket = buckets.get(i);
-            
-            // ממיינים את הדלי הספציפי (ברמה הפנימית)
-            Collections.sort(bucket); 
-            
-            // החלק החשוב שלנו: שופכים את התוכן חזרה למערך בעזרת דריסה (OVERWRITE)
-            for (T targetVal : bucket) {
-                
-                overwrite(array, writeIdx, targetVal); // אין שגיאות steps!
+            for (T targetVal : buckets.get(i)) {
+                overwrite(array, writeIdx, targetVal); 
                 writeIdx++;
-                
+            }
+        }
+
+        // הפעלת Insertion Sort על המערך הראשי כדי למיין סופית ולאנמץ את ה"שיניים"
+        for(int i = 1; i < n; i++){
+            for(int j = i; j > 0; j--){
+                if (compare(array, j-1, j) > 0) {
+                    swap(array, j-1, j);
+                } else {
+                    break;
+                }
             }
         }
     }
